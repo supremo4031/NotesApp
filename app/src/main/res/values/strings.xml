@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+    <string name="haven_t_created_account">Haven\'t created account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="log_in">log in</string>
+    <string name="welcome">Welcome!</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_Up">Sign Up</string>
+    <string name="image">Image</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="create_a_note">Create a note</string>
+</resources>
