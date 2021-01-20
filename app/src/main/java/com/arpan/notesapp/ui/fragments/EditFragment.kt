@@ -1,21 +1,18 @@
 package com.arpan.notesapp.ui.fragments
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.annotation.RequiresApi
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.arpan.notesapp.R
 import com.arpan.notesapp.ui.viewmodels.EditViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit.*
 
+@AndroidEntryPoint
 class EditFragment : Fragment(R.layout.fragment_edit) {
 
     private val args : EditFragmentArgs by navArgs()

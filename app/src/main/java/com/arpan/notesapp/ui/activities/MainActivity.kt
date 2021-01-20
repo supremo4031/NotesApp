@@ -48,6 +48,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        main_search.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                return false;
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                noteViewModel.selectQuery(query ?: "")
+                return true;
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.flow.collect
 
+
 class MainFragment : Fragment(R.layout.fragment_main) {
 
 
@@ -28,12 +29,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val noteViewModel : NoteViewModel by activityViewModels()
 
+    private var notes : List<Note> = ArrayList()
+
     private val mUser = Firebase.auth.currentUser
     private val uid = mUser?.uid
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         main_recyclerView.apply {
             adapter = noteAdapter
@@ -49,15 +51,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 putSerializable("notes", Note())
                 putString("uid", uid ?: "")
             }
-            findNavController().navigate (
-                    R.id.action_mainFragment_to_editFragment,
-                    bundle
+            findNavController().navigate(
+                R.id.action_mainFragment_to_editFragment,
+                bundle
             )
         }
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+            override fun onItemSelected(
+                adapterView: AdapterView<*>?,
+                view: View?,
+                pos: Int,
+                id: Long
+            ) {
                 when(pos) {
                     0 -> {
                         uid?.let { noteViewModel.getAllNotesSortedByLastEdited(it) }
@@ -90,16 +97,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //                            main_progressbar.visibility = View.GONE
                         result.data?.let {
                             Log.d("supremo", it.toString())
+                            notes = it
                             noteAdapter.updateList(it)
                         }
                     }
                     Status.LOADING -> {
-                        Toast.makeText(requireContext(), "Loading data, Please wait...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Loading data, Please wait...",
+                            Toast.LENGTH_SHORT
+                        ).show()
 //                        main_progressbar.visibility = View.VISIBLE
                     }
-                    Status.ERROR ->  {
+                    Status.ERROR -> {
 //                        main_progressbar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Not getting data", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Not getting data", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     else -> {
 
@@ -116,12 +129,36 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 else {
                     StaggeredGridLayoutManager(
-                            2,
-                            LinearLayoutManager.VERTICAL
+                        2,
+                        LinearLayoutManager.VERTICAL
                     )
                 }
             }
         }
+
+        lifecycleScope.launchWhenCreated {
+            noteViewModel.query.collect {
+                if(it.isEmpty()) {
+                    noteAdapter.updateList(notes)
+                } else {
+                    filter(it)
+                }
+            }
+        }
+    }
+
+
+    fun filter(text: String) {
+        val temp: MutableList<Note> = ArrayList()
+        for (d in notes) {
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if (d.title?.contains(text)  == true || d.description?.contains(text) == true) {
+                temp.add(d)
+            }
+        }
+        //update recyclerview
+        noteAdapter.updateList(temp)
     }
 
 }

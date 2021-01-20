@@ -19,12 +19,17 @@ import kotlinx.coroutines.launch
 class NoteViewModel @ViewModelInject constructor(
     private val preference: DataStorePreference,
     private val noteRepository : NoteRepository,
-    private val collectionRef : CollectionReference
+    collectionRef : CollectionReference
 ) : ViewModel() {
 
     private var uid : String? = null
 
+    private var _query = MutableStateFlow("")
+    val query : StateFlow<String> = _query
 
+    fun selectQuery(search: String) {
+        _query.value = search
+    }
 
     private var _isLinear = MutableStateFlow(true)
     val isLinear : StateFlow<Boolean> = _isLinear
