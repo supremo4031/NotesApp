@@ -5,10 +5,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.arpan.notesapp.R
-import com.arpan.notesapp.ui.viewmodels.EditViewModel
+import com.arpan.notesapp.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit.*
 
@@ -17,7 +17,7 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
 
     private val args : EditFragmentArgs by navArgs()
 
-    private val viewModel : EditViewModel by viewModels()
+    private val viewModel : NoteViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

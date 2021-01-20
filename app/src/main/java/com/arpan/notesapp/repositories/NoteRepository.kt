@@ -21,4 +21,6 @@ class NoteRepository @Inject constructor(
     suspend fun insertNote(id : String, note: Note) = firebaseUtils.insertNote(id, note)
 
     suspend fun updateNote(id : String, note: Note) = firebaseUtils.updateNote(id, note)
+
+    suspend fun deleteNote(id : String) = firebaseUtils.deleteNote(id)
 }

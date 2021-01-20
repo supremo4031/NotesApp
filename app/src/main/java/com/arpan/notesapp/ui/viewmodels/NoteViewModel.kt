@@ -110,4 +110,16 @@ class NoteViewModel @ViewModelInject constructor(
             _noteItems.value = Resource.success(notes)
         }
     }
+
+    fun insertNote(id : String, note: Note) = viewModelScope.launch {
+        noteRepository.insertNote(id, note)
+    }
+
+    fun updateNote(id : String, note: Note) = viewModelScope.launch {
+        noteRepository.updateNote(id, note)
+    }
+
+    fun deleteNote(id: String) = viewModelScope.launch {
+        noteRepository.deleteNote(id)
+    }
 }

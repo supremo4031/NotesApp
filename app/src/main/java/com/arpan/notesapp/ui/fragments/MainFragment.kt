@@ -9,13 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.arpan.notesapp.R
 import com.arpan.notesapp.adpaters.NoteAdapter
 import com.arpan.notesapp.firebase.Note
 import com.arpan.notesapp.others.Status
 import com.arpan.notesapp.ui.viewmodels.NoteViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -57,6 +60,36 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             )
         }
 
+        val itemTouchHelperCallback = object  : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val pos = viewHolder.adapterPosition
+                val note = noteAdapter.differ.currentList[pos]
+                val id = "${note.dateCreated}${note.uid}"
+                noteViewModel.deleteNote(id)
+                Snackbar.make(view, "Successfully deleted note", Snackbar.LENGTH_LONG).apply {
+                    setAction("Undo") {
+                        noteViewModel.insertNote(id, note)
+                    }
+                    show()
+                }
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(main_recyclerView)
+        }
+
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -93,8 +126,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             noteViewModel.noteItems.collect { result ->
                 when(result.status) {
                     Status.SUCCESS -> {
-                        // if(main_progressbar.visibility == View.VISIBLE)
-//                            main_progressbar.visibility = View.GONE
+                         if(main_progressbar.visibility == View.VISIBLE)
+                            main_progressbar.visibility = View.GONE
                         result.data?.let {
                             Log.d("supremo", it.toString())
                             notes = it
@@ -102,15 +135,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         }
                     }
                     Status.LOADING -> {
-                        Toast.makeText(
-                            requireContext(),
-                            "Loading data, Please wait...",
-                            Toast.LENGTH_SHORT
-                        ).show()
-//                        main_progressbar.visibility = View.VISIBLE
+                        if(main_progressbar.visibility == View.GONE)
+                            main_progressbar.visibility = View.VISIBLE
                     }
                     Status.ERROR -> {
-//                        main_progressbar.visibility = View.GONE
+                        if(main_progressbar.visibility == View.VISIBLE)
+                            main_progressbar.visibility = View.GONE
                         Toast.makeText(requireContext(), "Not getting data", Toast.LENGTH_SHORT)
                             .show()
                     }
@@ -148,7 +178,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
 
-    fun filter(text: String) {
+    private fun filter(text: String) {
         val temp: MutableList<Note> = ArrayList()
         for (d in notes) {
             //or use .equal(text) with you want equal match

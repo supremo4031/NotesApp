@@ -40,7 +40,7 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         }
     }
 
-    private var differ = AsyncListDiffer(
+    var differ = AsyncListDiffer(
         this,
         differCallback
     )

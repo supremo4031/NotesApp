@@ -75,4 +75,13 @@ class FirebaseUtils(
         }
     }
 
+    suspend fun deleteNote(id: String) : Boolean {
+        return try {
+            notesCollection.document(id).delete().await()
+            true
+        } catch (e : Exception) {
+            false
+        }
+    }
+
 }
