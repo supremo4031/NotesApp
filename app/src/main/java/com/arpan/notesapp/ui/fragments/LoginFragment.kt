@@ -1,18 +1,13 @@
 package com.arpan.notesapp.ui.fragments
 
-import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.arpan.notesapp.R
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.custom_progressbar.*
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_signup.*
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -21,6 +16,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val user = firebaseAuth.currentUser
 

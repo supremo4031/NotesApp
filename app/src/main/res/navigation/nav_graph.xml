@@ -22,11 +22,21 @@
         <action
             android:id="@+id/action_mainFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
         android:name="com.arpan.notesapp.ui.fragments.EditFragment"
-        android:label="EditFragment" />
+        android:label="EditFragment" >
+        <argument
+            android:name="notes"
+            app:argType="com.arpan.notesapp.firebase.Note" />
+        <argument
+            android:name="uid"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.arpan.notesapp.ui.fragments.SignUpFragment"

@@ -28,6 +28,7 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         sign_up_button.setOnClickListener {
             val name = sign_up_name.text.toString()
             val email = sign_up_email.text.toString()
@@ -51,9 +52,8 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
                     sign_up_confirm_password.error = "Password and confirm password should be same"
                 }
                 else -> {
-                    val dialog = showProgressDialog(
-                        requireContext()
-                    )
+                    val dialog = getAlertDialog(requireContext())
+                    dialog.show()
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
                         val navOptions = NavOptions.Builder()
                             .setPopUpTo(R.id.signUpFragment, true)
@@ -79,18 +79,10 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         context: Context
     ): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        val customLayout: View =
-            layoutInflater.inflate(R.layout.custom_progressbar, null)
+        val customLayout: View = layoutInflater.inflate(R.layout.custom_progressbar, null)
         builder.setView(customLayout)
         val dialog = builder.create()
         dialog.setCanceledOnTouchOutside(true)
-        return dialog
-    }
-
-    private fun showProgressDialog(context: Context): AlertDialog {
-        val dialog = getAlertDialog(context)
-        dialog.show()
-        dialog.text_progress_bar.text = "Loading, Please wait..."
         return dialog
     }
 

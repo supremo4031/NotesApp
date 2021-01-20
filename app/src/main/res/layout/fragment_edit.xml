@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/edit_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,23 +22,28 @@
         android:id="@+id/edit_notes_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:hint="@string/title"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="24sp"
+        android:ems="20"
         android:background="@null"
         android:inputType="textCapSentences|textMultiLine"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/edit_imageView" />
 
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_notes_text"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/note"
+        android:layout_height="0dp"
         android:background="@null"
-        android:layout_marginTop="10dp"
+        android:hint="@string/note"
+        android:gravity="top|start"
         android:inputType="textCapSentences|textMultiLine"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/edit_notes_title" />
