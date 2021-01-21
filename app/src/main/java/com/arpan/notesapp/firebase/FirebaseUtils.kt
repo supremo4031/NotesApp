@@ -1,5 +1,6 @@
 package com.arpan.notesapp.firebase
 
+import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +24,7 @@ class FirebaseUtils(
             try {
                 offer(snapshot.toObjects(Note::class.java))
             } catch (e : Exception) {
-
+                Log.d("supremo", e.toString())
             }
         }
 

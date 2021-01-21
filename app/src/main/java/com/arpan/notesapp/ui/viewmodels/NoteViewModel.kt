@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -59,7 +60,10 @@ class NoteViewModel @ViewModelInject constructor(
     }
 
     fun getAllNotes(uid: String, orderBy: String, type: Query.Direction) = viewModelScope.launch {
-        noteRepository.getAllNotes(uid, orderBy, type).collect { notes ->
+        noteRepository.getAllNotes(uid, orderBy, type)
+                .catch {
+                    _noteItems.value = Resource.error("An unknown error occured", null)
+                }.collect { notes ->
             _noteItems.value = Resource.success(notes)
         }
     }

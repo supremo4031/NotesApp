@@ -147,8 +147,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             noteViewModel.noteItems.collect { result ->
                 when(result.status) {
                     Status.SUCCESS -> {
-                         if(main_progressbar.visibility == View.VISIBLE)
-                            main_progressbar.visibility = View.GONE
+                         if(main_progressbar?.visibility == View.VISIBLE)
+                            main_progressbar?.visibility = View.GONE
                         result.data?.let {
                             Log.d("supremo", it.toString())
                             notes = it
@@ -156,14 +156,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         }
                     }
                     Status.LOADING -> {
-                        if(main_progressbar.visibility == View.GONE)
-                            main_progressbar.visibility = View.VISIBLE
+                        if(main_progressbar?.visibility == View.GONE)
+                            main_progressbar?.visibility = View.VISIBLE
                     }
                     Status.ERROR -> {
-                        if(main_progressbar.visibility == View.VISIBLE)
-                            main_progressbar.visibility = View.GONE
-                        Toast.makeText(requireContext(), "Not getting data", Toast.LENGTH_SHORT)
-                            .show()
+                        if(main_progressbar?.visibility == View.VISIBLE)
+                            main_progressbar?.visibility = View.GONE
+                        Toast.makeText(requireContext(), "Not getting data", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
 
