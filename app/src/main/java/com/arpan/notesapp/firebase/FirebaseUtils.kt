@@ -1,55 +1,33 @@
 package com.arpan.notesapp.firebase
 
-import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
+@ExperimentalCoroutinesApi
 class FirebaseUtils(
     private var notesCollection : CollectionReference
 ) {
 
 
 
-    suspend fun getAllNotes() : List<Note>? {
-        return try {
-            notesCollection.get().await().toObjects(Note::class.java)
-        } catch (e : Exception) {
-            emptyList()
-        }
-    }
+    fun getAllNotes(uid: String, orderBy: String, type: Query.Direction) : Flow<List<Note>> = callbackFlow {
+        val subscription = notesCollection.whereEqualTo("uid", uid).orderBy(orderBy, type).addSnapshotListener { snapshot, _ ->
+            if(snapshot == null) {
+                return@addSnapshotListener
+            }
+            try {
+                offer(snapshot.toObjects(Note::class.java))
+            } catch (e : Exception) {
 
-    suspend fun getAllNotesSortedByDate(uid: String) : List<Note>? {
-        return try {
-            notesCollection.whereEqualTo("uid", uid).orderBy("dateCreated").get().await().toObjects(Note::class.java)
-        } catch (e : Exception) {
-            emptyList()
+            }
         }
-    }
 
-    suspend fun getAllNotesSortedByTitle(uid: String) : List<Note>? {
-        return try {
-            notesCollection.whereEqualTo("uid", uid).orderBy("title").get().await().toObjects(Note::class.java)
-        } catch (e : Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun getAllNotesSortedByDescription(uid: String) : List<Note>? {
-        return try {
-            notesCollection.whereEqualTo("uid", uid).orderBy("description").get().await().toObjects(Note::class.java)
-        } catch (e : Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun getAllNotesSortedByLastEdited(uid: String) : List<Note>? {
-        return try {
-            notesCollection.whereEqualTo("uid", uid).orderBy("lastEdited", Query.Direction.DESCENDING).get().await().toObjects(Note::class.java)
-        } catch (e : Exception) {
-            Log.d("supremo", e.toString())
-            emptyList()
-        }
+        awaitClose{ subscription.remove() }
     }
 
     suspend fun insertNote(id : String, note: Note) : Boolean {

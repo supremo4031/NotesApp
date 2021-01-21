@@ -11,8 +11,10 @@ import com.arpan.notesapp.R
 import com.arpan.notesapp.ui.viewmodels.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class EditFragment : Fragment(R.layout.fragment_edit) {
 
     private val args : EditFragmentArgs by navArgs()

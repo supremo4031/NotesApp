@@ -20,15 +20,21 @@ import com.arpan.notesapp.others.Status
 import com.arpan.notesapp.ui.viewmodels.NoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 
 
+@ExperimentalCoroutinesApi
 class MainFragment : Fragment(R.layout.fragment_main) {
 
 
     private var noteAdapter : NoteAdapter = NoteAdapter()
+
+    private var job : Job? = null
 
     private val noteViewModel : NoteViewModel by activityViewModels()
 
@@ -100,19 +106,34 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             ) {
                 when(pos) {
                     0 -> {
-                        uid?.let { noteViewModel.getAllNotesSortedByLastEdited(it) }
+                        uid?.let {
+                            job?.cancel()
+                            job = noteViewModel.getAllNotes(it, "lastEdited", Query.Direction.DESCENDING)
+                        }
                     }
                     1 -> {
-                        uid?.let { noteViewModel.getAllNotesSortedByDate(it) }
+                        uid?.let {
+                            job?.cancel()
+                            noteViewModel.getAllNotes(it, "dateCreated", Query.Direction.ASCENDING)
+                        }
                     }
                     2 -> {
-                        uid?.let { noteViewModel.getAllNotesSortedByDescription(it) }
+                        uid?.let {
+                            job?.cancel()
+                            job = noteViewModel.getAllNotes(it, "description", Query.Direction.ASCENDING)
+                        }
                     }
                     3 -> {
-                        uid?.let { noteViewModel.getAllNotesSortedByTitle(it) }
+                        uid?.let {
+                            job?.cancel()
+                            job = noteViewModel.getAllNotes(it, "title", Query.Direction.ASCENDING)
+                        }
                     }
                     else -> {
-                        uid?.let { noteViewModel.getAllNotesSortedByLastEdited(it) }
+                        uid?.let {
+                            job?.cancel()
+                            job = noteViewModel.getAllNotes(it, "lastEdited", Query.Direction.DESCENDING)
+                        }
                     }
                 }
             }

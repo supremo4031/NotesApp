@@ -2,21 +2,16 @@ package com.arpan.notesapp.repositories
 
 import com.arpan.notesapp.firebase.FirebaseUtils
 import com.arpan.notesapp.firebase.Note
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class NoteRepository @Inject constructor(
     private val firebaseUtils : FirebaseUtils
 ) {
 
-    suspend fun getAllNotes() = firebaseUtils.getAllNotes()
-
-    suspend fun getAllNotesSortedByDate(uid: String) = firebaseUtils.getAllNotesSortedByDate(uid)
-
-    suspend fun getAllNotesSortedByTitle(uid: String) = firebaseUtils.getAllNotesSortedByTitle(uid)
-
-    suspend fun getAllNotesSortedByDescription(uid: String) = firebaseUtils.getAllNotesSortedByDescription(uid)
-
-    suspend fun getAllNotesSortedByLastEdited(uid: String) = firebaseUtils.getAllNotesSortedByLastEdited(uid)
+    fun getAllNotes(uid: String, orderBy: String, type: Query.Direction) = firebaseUtils.getAllNotes(uid, orderBy, type)
 
     suspend fun insertNote(id : String, note: Note) = firebaseUtils.insertNote(id, note)
 
